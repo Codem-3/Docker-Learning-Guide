@@ -1,8 +1,9 @@
-﻿# Docker Learning Guide 
+﻿# Docker Learning Guide
 
 A comprehensive reference guide for learning Docker fundamentals, best practices, and troubleshooting.
 
 ## Table of Contents
+
 - [What is Docker?](#what-is-docker)
 - [Installation](#installation)
 - [Basic Concepts](#basic-concepts)
@@ -20,7 +21,8 @@ A comprehensive reference guide for learning Docker fundamentals, best practices
 
 Docker is a containerization platform that allows you to package applications and their dependencies into lightweight, portable containers. Containers ensure that your application runs consistently across different environments.
 
-### Key Benefits:
+### Key Benefits
+
 - **Consistency**: Same environment across development, testing, and production
 - **Isolation**: Applications run in isolated environments
 - **Portability**: Run anywhere Docker is installed
@@ -30,20 +32,23 @@ Docker is a containerization platform that allows you to package applications an
 ## Installation
 
 ### Windows
+
 1. Download Docker Desktop from [docker.com](https://www.docker.com/products/docker-desktop)
 2. Install and restart your computer
-3. Verify installation: docker --version
+3. Verify installation: `docker --version`
 
 ### macOS
-`ash
+
+```bash
 # Using Homebrew
 brew install --cask docker
 
 # Or download from docker.com
-`
+```
 
 ### Linux (Ubuntu/Debian)
-`ash
+
+```bash
 # Update package index
 sudo apt update
 
@@ -55,16 +60,18 @@ sudo systemctl start docker
 sudo systemctl enable docker
 
 # Add user to docker group (optional)
-sudo usermod -aG docker 
-`
+sudo usermod -aG docker $USER
+```
 
 ## Basic Concepts
 
 ### Images vs Containers
+
 - **Image**: A read-only template used to create containers (like a class in programming)
 - **Container**: A running instance of an image (like an object in programming)
 
 ### Key Components
+
 - **Dockerfile**: Text file with instructions to build an image
 - **Registry**: Repository for storing and sharing images (Docker Hub, etc.)
 - **Volume**: Persistent storage for containers
@@ -73,7 +80,8 @@ sudo usermod -aG docker
 ## Essential Commands
 
 ### System Information
-`ash
+
+```bash
 # Check Docker version
 docker --version
 docker version
@@ -83,10 +91,11 @@ docker info
 
 # Show disk usage
 docker system df
-`
+```
 
 ### Image Commands
-`ash
+
+```bash
 # List local images
 docker images
 docker image ls
@@ -101,10 +110,11 @@ docker image rm nginx
 
 # Remove unused images
 docker image prune
-`
+```
 
 ### Container Commands
-`ash
+
+```bash
 # List running containers
 docker ps
 
@@ -131,12 +141,13 @@ docker rm container-name
 
 # Remove all stopped containers
 docker container prune
-`
+```
 
 ## Working with Images
 
 ### Pulling Images
-`ash
+
+```bash
 # Pull latest version
 docker pull nginx
 
@@ -145,10 +156,11 @@ docker pull nginx:1.21
 
 # Pull from different registry
 docker pull registry.example.com/my-image
-`
+```
 
 ### Building Images
-`ash
+
+```bash
 # Build from Dockerfile in current directory
 docker build .
 
@@ -157,10 +169,11 @@ docker build -t my-app:latest .
 
 # Build with specific Dockerfile
 docker build -f Dockerfile.prod -t my-app:prod .
-`
+```
 
 ### Image Management
-`ash
+
+```bash
 # Inspect image details
 docker inspect nginx
 
@@ -172,12 +185,13 @@ docker save nginx > nginx.tar
 
 # Load image from file
 docker load < nginx.tar
-`
+```
 
 ## Container Management
 
 ### Running Containers
-`ash
+
+```bash
 # Basic run
 docker run nginx
 
@@ -192,10 +206,11 @@ docker run -e MYSQL_ROOT_PASSWORD=secret mysql
 
 # Run with resource limits
 docker run --memory=512m --cpus=1 nginx
-`
+```
 
 ### Container Lifecycle
-`ash
+
+```bash
 # Create container without starting
 docker create nginx
 
@@ -213,10 +228,11 @@ docker unpause container-name
 
 # Kill container (force stop)
 docker kill container-name
-`
+```
 
 ### Container Interaction
-`ash
+
+```bash
 # Execute command in running container
 docker exec -it container-name bash
 
@@ -229,19 +245,21 @@ docker logs container-name
 
 # Follow logs in real-time
 docker logs -f container-name
-`
+```
 
 ## Volume Mounting
 
 Volumes allow you to persist data and share files between the host and container.
 
 ### Types of Volumes
+
 1. **Bind Mounts**: Mount host directory into container
 2. **Named Volumes**: Docker-managed volumes
 3. **Anonymous Volumes**: Temporary volumes
 
 ### Bind Mounts
-`ash
+
+```bash
 # Mount host directory to container
 docker run -v /host/path:/container/path nginx
 
@@ -253,10 +271,11 @@ docker run -v E:\Downloads\Chrome\staticwebsite:/app nginx
 
 # Read-only mount
 docker run -v /host/path:/container/path:ro nginx
-`
+```
 
 ### Named Volumes
-`ash
+
+```bash
 # Create named volume
 docker volume create my-volume
 
@@ -271,10 +290,11 @@ docker volume inspect my-volume
 
 # Remove volume
 docker volume rm my-volume
-`
+```
 
 ### Volume Management
-`ash
+
+```bash
 # List all volumes
 docker volume ls
 
@@ -283,12 +303,13 @@ docker volume prune
 
 # Backup volume data
 docker run --rm -v my-volume:/data -v E:\Downloads\Chrome\staticwebsite:/backup ubuntu tar czf /backup/backup.tar.gz -C /data .
-`
+```
 
 ## Port Mapping & Networking
 
 ### Port Mapping
-`ash
+
+```bash
 # Map host port to container port
 docker run -p 8080:80 nginx
 
@@ -300,10 +321,11 @@ docker run -P nginx
 
 # Map multiple ports
 docker run -p 8080:80 -p 3306:3306 nginx
-`
+```
 
 ### Network Types
-`ash
+
+```bash
 # List networks
 docker network ls
 
@@ -318,22 +340,24 @@ docker network connect my-network container-name
 
 # Disconnect container from network
 docker network disconnect my-network container-name
-`
+```
 
 ### Container Communication
-`ash
+
+```bash
 # Run containers in same network
 docker run --name web --network my-network nginx
 docker run --name db --network my-network mysql
 
 # Containers can communicate using container names
 # From web container: curl http://db:3306
-`
+```
 
 ## Dockerfile Basics
 
 ### Basic Structure
-`dockerfile
+
+```dockerfile
 # Use official base image
 FROM ubuntu:20.04
 
@@ -354,23 +378,25 @@ EXPOSE 8000
 
 # Define default command
 CMD ["python3", "app.py"]
-`
+```
 
 ### Common Instructions
-- FROM: Base image
-- WORKDIR: Set working directory
-- COPY: Copy files from host to container
-- ADD: Copy files with additional features (URLs, tar extraction)
-- RUN: Execute commands during build
-- ENV: Set environment variables
-- EXPOSE: Document port (doesn't actually expose)
-- CMD: Default command when container starts
-- ENTRYPOINT: Fixed command that always runs
-- USER: Set user for subsequent instructions
-- VOLUME: Create mount point
+
+- **FROM**: Base image
+- **WORKDIR**: Set working directory
+- **COPY**: Copy files from host to container
+- **ADD**: Copy files with additional features (URLs, tar extraction)
+- **RUN**: Execute commands during build
+- **ENV**: Set environment variables
+- **EXPOSE**: Document port (doesn't actually expose)
+- **CMD**: Default command when container starts
+- **ENTRYPOINT**: Fixed command that always runs
+- **USER**: Set user for subsequent instructions
+- **VOLUME**: Create mount point
 
 ### Multi-stage Builds
-`dockerfile
+
+```dockerfile
 # Build stage
 FROM node:16 AS builder
 WORKDIR /app
@@ -384,12 +410,13 @@ FROM nginx:alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
-`
+```
 
 ## Best Practices
 
 ### Security
-`ash
+
+```bash
 # Run as non-root user
 USER 1000
 
@@ -400,10 +427,11 @@ FROM nginx:1.21
 docker scan nginx
 
 # Use multi-stage builds to reduce image size
-`
+```
 
 ### Performance
-`ash
+
+```bash
 # Use .dockerignore file
 echo "node_modules" >> .dockerignore
 echo "*.log" >> .dockerignore
@@ -416,10 +444,11 @@ COPY . .
 
 # Use alpine images for smaller size
 FROM node:16-alpine
-`
+```
 
 ### Resource Management
-`ash
+
+```bash
 # Set memory limits
 docker run --memory=512m nginx
 
@@ -428,14 +457,15 @@ docker run --cpus=1 nginx
 
 # Set restart policy
 docker run --restart=unless-stopped nginx
-`
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
 #### Container Won't Start
-`ash
+
+```bash
 # Check container logs
 docker logs container-name
 
@@ -444,10 +474,11 @@ docker run -it nginx bash
 
 # Check if port is already in use
 netstat -tulpn | grep :8080
-`
+```
 
 #### Volume Mount Issues
-`ash
+
+```bash
 # Check if path exists
 ls -la /host/path
 
@@ -456,10 +487,11 @@ docker run -v /host/path:/container/path nginx
 
 # Use absolute paths on Windows
 docker run -v "C:\full\path:/app" nginx
-`
+```
 
 #### Network Issues
-`ash
+
+```bash
 # Check if port is accessible
 curl http://localhost:8080
 
@@ -468,10 +500,11 @@ docker inspect container-name | grep NetworkMode
 
 # Test container connectivity
 docker exec container-name ping google.com
-`
+```
 
 ### Debugging Commands
-`ash
+
+```bash
 # Inspect container details
 docker inspect container-name
 
@@ -483,12 +516,13 @@ docker stats container-name
 
 # Check system events
 docker events
-`
+```
 
 ## Real-World Examples
 
 ### Static Website (Nginx)
-`ash
+
+```bash
 # Create directory structure
 mkdir static-website
 cd static-website
@@ -501,10 +535,11 @@ docker run --name website \
   -p 8080:80 \
   -v "E:\Downloads\Chrome\staticwebsite:/usr/share/nginx/html" \
   nginx
-`
+```
 
 ### Node.js Application
-`dockerfile
+
+```dockerfile
 FROM node:16-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -512,16 +547,17 @@ RUN npm install
 COPY . .
 EXPOSE 3000
 CMD ["npm", "start"]
-`
+```
 
-`ash
+```bash
 # Build and run
 docker build -t my-node-app .
 docker run -p 3000:3000 my-node-app
-`
+```
 
 ### Database with Persistent Storage
-`ash
+
+```bash
 # Run MySQL with persistent volume
 docker run --name mysql-db \
   -e MYSQL_ROOT_PASSWORD=secret \
@@ -529,10 +565,11 @@ docker run --name mysql-db \
   -v mysql-data:/var/lib/mysql \
   -p 3306:3306 \
   mysql:8.0
-`
+```
 
 ### Multi-Container Application (Docker Compose)
-`yaml
+
+```yaml
 version: '3.8'
 services:
   web:
@@ -543,7 +580,7 @@ services:
       - db
     environment:
       - DATABASE_URL=mysql://user:password@db:3306/myapp
-  
+
   db:
     image: mysql:8.0
     environment:
@@ -554,12 +591,13 @@ services:
 
 volumes:
   mysql-data:
-`
+```
 
 ## Useful Commands Reference
 
 ### Quick Reference
-`ash
+
+```bash
 # Essential commands
 docker run -d -p 8080:80 --name my-app nginx
 docker ps
@@ -572,10 +610,11 @@ docker rm my-app
 docker system prune -a  # Remove all unused resources
 docker volume prune     # Remove unused volumes
 docker network prune    # Remove unused networks
-`
+```
 
 ### Environment-Specific Commands
-`ash
+
+```bash
 # Development
 docker run -it --rm -v E:\Downloads\Chrome\staticwebsite:/app node:16 bash
 
@@ -584,7 +623,7 @@ docker run -d --restart=unless-stopped -p 80:80 nginx
 
 # Testing
 docker run --rm -v E:\Downloads\Chrome\staticwebsite:/app -w /app node:16 npm test
-`
+```
 
 ## Next Steps
 
@@ -603,6 +642,6 @@ docker run --rm -v E:\Downloads\Chrome\staticwebsite:/app -w /app node:16 npm te
 
 ---
 
-**Happy Containerizing! **
+**Happy Containerizing!**
 
 *This guide covers the fundamentals of Docker. Practice with real projects to solidify your understanding.*
